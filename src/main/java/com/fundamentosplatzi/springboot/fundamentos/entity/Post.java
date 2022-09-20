@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "post")
+@Table(name = "posts")
 public class Post {
 
     @Id
@@ -20,6 +20,6 @@ public class Post {
 
 
     @ManyToOne
-    private User user;
+    private UserEntity userEntity;
 
 }

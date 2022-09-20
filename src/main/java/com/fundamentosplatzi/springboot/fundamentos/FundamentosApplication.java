@@ -3,13 +3,19 @@ package com.fundamentosplatzi.springboot.fundamentos;
 import com.fundamentosplatzi.springboot.fundamentos.bean.MyBean;
 import com.fundamentosplatzi.springboot.fundamentos.bean.MyBeanWithDependency;
 import com.fundamentosplatzi.springboot.fundamentos.component.ComponentDependency;
+import com.fundamentosplatzi.springboot.fundamentos.entity.UserEntity;
 import com.fundamentosplatzi.springboot.fundamentos.pojo.User;
+import com.fundamentosplatzi.springboot.fundamentos.repository.UserRepository;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 @SpringBootApplication
 @EnableConfigurationProperties(User.class)
@@ -24,12 +30,15 @@ public class FundamentosApplication implements CommandLineRunner {
     private MyBeanWithDependency myBeanWithDependency;
     private User user;
 
+    private UserRepository userRepository;
+
     public FundamentosApplication(ComponentDependency componentDependency, MyBean myBean,
-                                  MyBeanWithDependency myBeanWithDependency, User user) {
+                                  MyBeanWithDependency myBeanWithDependency, User user, UserRepository userRepository) {
         this.componentDependency = componentDependency;
         this.myBean = myBean;
         this.myBeanWithDependency = myBeanWithDependency;
         this.user = user;
+        this.userRepository = userRepository;
     }
 
     public static void main(String[] args) {
@@ -39,17 +48,33 @@ public class FundamentosApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        //ejemplosAnteriores();
+        saveUsersInDataBase();
+    }
+
+    private void saveUsersInDataBase() {
+        UserEntity user1 = new UserEntity("Julio", "julio@mail.com", LocalDateTime.now());
+        UserEntity user2 = new UserEntity("Luisa", "luisa@mail.com", LocalDateTime.now());
+        UserEntity user3 = new UserEntity("Camila", "camila@mail.com", LocalDateTime.now());
+        UserEntity user4 = new UserEntity("Valeria", "valeria@mail.com", LocalDateTime.now());
+        UserEntity user5 = new UserEntity("Andres", "andres@mail.com", LocalDateTime.now());
+
+        List<UserEntity> listUsers = Arrays.asList(user1, user2, user3, user4, user5);
+        userRepository.saveAll(listUsers);
+
+    }
+
+    private void ejemplosAnteriores() {
         componentDependency.saludar();
         myBean.print();
         myBeanWithDependency.printWithDependency();
         System.out.println(user.nombreCompleto());
         try {
-			//Codigo
-            int value = 10/0;
+            //Codigo
+            int value = 10 / 0;
             LOGGER.info("Mi valor : " + value);
         } catch (Exception e) {
             LOGGER.error("Esto es un error al dividir por cero" + e.getMessage());
         }
-
     }
 }

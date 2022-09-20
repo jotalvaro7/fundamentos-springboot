@@ -10,8 +10,8 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "user")
-public class User {
+@Table(name = "UserEntitys")
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,9 +26,16 @@ public class User {
 
     private LocalDateTime birthDate;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Post> posts = new ArrayList<>();
 
+    public UserEntity() {
+    }
 
+    public UserEntity(String name, String email, LocalDateTime birthDate) {
+        this.name = name;
+        this.email = email;
+        this.birthDate = birthDate;
+    }
 }

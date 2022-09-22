@@ -57,7 +57,7 @@ public class FundamentosApplication implements CommandLineRunner {
     private void saveUsersInDataBase() {
         UserEntity user1 = new UserEntity("Julio", "julio@mail.com", LocalDateTime.now());
         UserEntity user2 = new UserEntity("Luisa", "luisa@mail.com", LocalDateTime.now());
-        UserEntity user3 = new UserEntity("Camila", "camila@mail.com", LocalDateTime.now());
+        UserEntity user3 = new UserEntity("Luisa", "camila@mail.com", LocalDateTime.now());
         UserEntity user4 = new UserEntity("Valeria", "valeria@mail.com", LocalDateTime.now());
         UserEntity user5 = new UserEntity("Andres", "andres@mail.com", LocalDateTime.now());
         UserEntity user6 = new UserEntity("Julian", "julio1@mail.com", LocalDateTime.now());
@@ -74,6 +74,10 @@ public class FundamentosApplication implements CommandLineRunner {
 
         userRepository.findAndSort("Ju", Sort.by("id").descending())
                 .forEach(user -> LOGGER.info("usuario con metodo sort: " + user));
+
+        userRepository.findByName("Luisa").forEach(user -> LOGGER.info("Usuario con query method " + user));
+
+        LOGGER.info("usuario con el metodo findByNameAndEmail " + userRepository.findByNameAndEmail("Julio", "julio@mail.com"));
 
     }
 

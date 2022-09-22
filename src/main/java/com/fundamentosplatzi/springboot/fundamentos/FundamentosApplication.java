@@ -12,6 +12,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -50,6 +51,7 @@ public class FundamentosApplication implements CommandLineRunner {
     public void run(String... args) {
         //ejemplosAnteriores();
         saveUsersInDataBase();
+        getInformationJpqlFromUserEntity();
     }
 
     private void saveUsersInDataBase() {
@@ -58,9 +60,20 @@ public class FundamentosApplication implements CommandLineRunner {
         UserEntity user3 = new UserEntity("Camila", "camila@mail.com", LocalDateTime.now());
         UserEntity user4 = new UserEntity("Valeria", "valeria@mail.com", LocalDateTime.now());
         UserEntity user5 = new UserEntity("Andres", "andres@mail.com", LocalDateTime.now());
+        UserEntity user6 = new UserEntity("Julian", "julio1@mail.com", LocalDateTime.now());
+        UserEntity user7 = new UserEntity("Juan", "julio2@mail.com", LocalDateTime.now());
 
-        List<UserEntity> listUsers = Arrays.asList(user1, user2, user3, user4, user5);
+        List<UserEntity> listUsers = Arrays.asList(user1, user2, user3, user4, user5, user6, user7);
         userRepository.saveAll(listUsers);
+
+    }
+
+    private void getInformationJpqlFromUserEntity(){
+        LOGGER.info("Usuario con el metodo findByUserEmail" + userRepository.findByUserEmail("julio@mail.com")
+                .orElseThrow(() -> new RuntimeException("No se encontro el usuario")));
+
+        userRepository.findAndSort("Ju", Sort.by("id").descending())
+                .forEach(user -> LOGGER.info("usuario con metodo sort: " + user));
 
     }
 

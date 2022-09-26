@@ -14,7 +14,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.data.domain.Sort;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -55,13 +56,13 @@ public class FundamentosApplication implements CommandLineRunner {
     }
 
     private void saveUsersInDataBase() {
-        UserEntity user1 = new UserEntity("Julio", "julio@mail.com", LocalDateTime.now());
-        UserEntity user2 = new UserEntity("Luisa", "luisa@mail.com", LocalDateTime.now());
-        UserEntity user3 = new UserEntity("Luisa", "camila@mail.com", LocalDateTime.now());
-        UserEntity user4 = new UserEntity("Valeria", "valeria@mail.com", LocalDateTime.now());
-        UserEntity user5 = new UserEntity("Andres", "andres@mail.com", LocalDateTime.now());
-        UserEntity user6 = new UserEntity("Julian", "julio1@mail.com", LocalDateTime.now());
-        UserEntity user7 = new UserEntity("Juan", "julio2@mail.com", LocalDateTime.now());
+        UserEntity user1 = new UserEntity("Julio", "julio@mail.com", LocalDate.now());
+        UserEntity user2 = new UserEntity("Luisa", "luisa@mail.com", LocalDate.now());
+        UserEntity user3 = new UserEntity("Camila", "camila@mail.com", LocalDate.now());
+        UserEntity user4 = new UserEntity("Valeria", "valeria@mail.com", LocalDate.now());
+        UserEntity user5 = new UserEntity("Andres", "andres@mail.com", LocalDate.now());
+        UserEntity user6 = new UserEntity("Julian", "julian@mail.com", LocalDate.now());
+        UserEntity user7 = new UserEntity("Juan", "juan@mail.com", LocalDate.now());
 
         List<UserEntity> listUsers = Arrays.asList(user1, user2, user3, user4, user5, user6, user7);
         userRepository.saveAll(listUsers);
@@ -69,15 +70,37 @@ public class FundamentosApplication implements CommandLineRunner {
     }
 
     private void getInformationJpqlFromUserEntity(){
-        LOGGER.info("Usuario con el metodo findByUserEmail" + userRepository.findByUserEmail("julio@mail.com")
-                .orElseThrow(() -> new RuntimeException("No se encontro el usuario")));
+//        LOGGER.info("Usuario con el metodo findByUserEmail" + userRepository.findByUserEmail("julio@mail.com")
+//                .orElseThrow(() -> new RuntimeException("No se encontro el usuario")));
+//
+//        userRepository.findAndSort("Ju", Sort.by("id").descending())
+//                .forEach(user -> LOGGER.info("usuario con metodo sort: " + user));
+//
+//        userRepository.findByName("Luisa").forEach(user -> LOGGER.info("Usuario con query method " + user));
+//
+//        LOGGER.info("usuario con el metodo findByNameAndEmail " + userRepository.findByNameAndEmail("Julio", "julio@mail.com"));
+//
+//        userRepository.findByNameLike("%u%")
+//                .forEach(userEntity -> LOGGER.info("Usuario con findByNameLike " + userEntity ));
+//
+//        userRepository.findByNameOrEmail(null, "andres@mail.com")
+//                .forEach(userEntity -> LOGGER.info("Usuario con findByNameOrEmail " + userEntity ));
 
-        userRepository.findAndSort("Ju", Sort.by("id").descending())
-                .forEach(user -> LOGGER.info("usuario con metodo sort: " + user));
+        userRepository
+                .findByBirthDateBetween(LocalDate.of(2021, 3, 1), LocalDate.of(2022, 9, 25))
+                .forEach(userEntity -> LOGGER.info("Usuarios con findByBirthDateBetween " + userEntity));
 
-        userRepository.findByName("Luisa").forEach(user -> LOGGER.info("Usuario con query method " + user));
+        userRepository
+                .findByNameLikeOrderByIdDesc("%l%")
+                .forEach(user -> LOGGER.info("Usuarios con findByNameLikeOrderByIdDesc y ordenado de forma descendente " + user));
 
-        LOGGER.info("usuario con el metodo findByNameAndEmail " + userRepository.findByNameAndEmail("Julio", "julio@mail.com"));
+        userRepository
+                .findByNameContainingOrderByIdDesc("l")
+                .forEach(user -> LOGGER.info("Usuarios con findByNameContainingOrderByIdDesc y ordenado de forma descendente " + user));
+
+        userRepository
+                .findByNameContainsOrderByIdAsc("l")
+                .forEach(user -> LOGGER.info("Usuarios con findByNameContainsOrderByIdAsc y ordenado de forma ascendente " + user));
 
     }
 

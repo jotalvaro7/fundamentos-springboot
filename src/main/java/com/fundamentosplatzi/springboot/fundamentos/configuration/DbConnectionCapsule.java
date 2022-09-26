@@ -2,12 +2,14 @@ package com.fundamentosplatzi.springboot.fundamentos.configuration;
 
 import com.sun.istack.NotNull;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 @Data
+@NoArgsConstructor
 @Component
 @EnableConfigurationProperties
 @PropertySource("classpath:connection.properties")

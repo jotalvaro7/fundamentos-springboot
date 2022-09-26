@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +23,22 @@ public interface UserRepository extends JpaRepository<UserEntity,Long> {
     //Usando queryMethods (Hay un pluggin )
     List<UserEntity> findByName(String name);
     Optional<UserEntity> findByNameAndEmail(String name, String email);
+
+    List<UserEntity> findByNameLike(String name);
+
+    List<UserEntity> findByNameOrEmail(String name, String email);
+
+    List<UserEntity> findByBirthDateBetween(LocalDate begin, LocalDate end);
+
+    //Los tres metodos siguientes hacen los mismo la diferencia es como se le pasa el valor por el metodo
+    List<UserEntity> findByNameLikeOrderByIdDesc(String name);
+    List<UserEntity> findByNameContainingOrderByIdDesc(String name);
+    List<UserEntity> findByNameContainsOrderByIdAsc(String name);
+    //*************************************************************************************
+
+
+
+
 
 
 }

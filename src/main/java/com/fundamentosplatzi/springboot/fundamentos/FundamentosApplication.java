@@ -6,15 +6,14 @@ import com.fundamentosplatzi.springboot.fundamentos.component.ComponentDependenc
 import com.fundamentosplatzi.springboot.fundamentos.entity.UserEntity;
 import com.fundamentosplatzi.springboot.fundamentos.pojo.User;
 import com.fundamentosplatzi.springboot.fundamentos.repository.UserRepository;
+import com.fundamentosplatzi.springboot.fundamentos.service.UserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.data.domain.Sort;
 
-import java.time.LocalDate;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -34,13 +33,17 @@ public class FundamentosApplication implements CommandLineRunner {
 
     private UserRepository userRepository;
 
+    private UserService userService;
+
     public FundamentosApplication(ComponentDependency componentDependency, MyBean myBean,
-                                  MyBeanWithDependency myBeanWithDependency, User user, UserRepository userRepository) {
+                                  MyBeanWithDependency myBeanWithDependency, User user, UserRepository userRepository,
+                                  UserService userService) {
         this.componentDependency = componentDependency;
         this.myBean = myBean;
         this.myBeanWithDependency = myBeanWithDependency;
         this.user = user;
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     public static void main(String[] args) {
@@ -53,6 +56,26 @@ public class FundamentosApplication implements CommandLineRunner {
         //ejemplosAnteriores();
         saveUsersInDataBase();
         getInformationJpqlFromUserEntity();
+        saveWithErrorTransaccional();
+    }
+
+    private void saveWithErrorTransaccional(){
+        UserEntity user = new UserEntity("UserTest", "UserTest@domain.com", LocalDate.now());
+        UserEntity user2 = new UserEntity("UserTest2", "UserTest2@domain.com", LocalDate.now());
+        UserEntity user3 = new UserEntity("UserTest3", "UserTest@domain.com", LocalDate.now());
+        UserEntity user4 = new UserEntity("UserTest4", "UserTest4@domain.com", LocalDate.now());
+
+        List<UserEntity> users = Arrays.asList(user, user2, user3, user4);
+
+        try{
+            userService.saveTransaccional(users);
+
+        }catch (Exception e){
+            LOGGER.error("Esta es una excepcion dentro del metodo transaccional " + e);
+        }
+
+        userService.getAllUsers().forEach(usuario -> LOGGER.info("Este es el usuario dentro del metodo transaccional " + usuario));
+
     }
 
     private void saveUsersInDataBase() {

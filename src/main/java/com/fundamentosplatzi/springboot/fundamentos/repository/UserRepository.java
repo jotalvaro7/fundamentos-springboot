@@ -1,9 +1,11 @@
 package com.fundamentosplatzi.springboot.fundamentos.repository;
 
+import com.fundamentosplatzi.springboot.fundamentos.dto.UserDto;
 import com.fundamentosplatzi.springboot.fundamentos.entity.UserEntity;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -36,9 +38,11 @@ public interface UserRepository extends JpaRepository<UserEntity,Long> {
     List<UserEntity> findByNameContainsOrderByIdAsc(String name);
     //*************************************************************************************
 
-
-
-
-
+    @Query("SELECT new com.fundamentosplatzi.springboot.fundamentos.dto.UserDto(u.id, u.name, u.birthDate)" +
+            " FROM UserEntity u" +
+            " WHERE u.birthDate=:parametroFecha " +
+            " AND u.email=:parametroEmail ")
+    List<UserDto> encontrarUsuarioConDTO(@Param("parametroFecha") LocalDate date,
+                                         @Param("parametroEmail") String email);
 
 }

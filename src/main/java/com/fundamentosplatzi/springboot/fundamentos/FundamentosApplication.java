@@ -56,13 +56,13 @@ public class FundamentosApplication implements CommandLineRunner {
     }
 
     private void saveUsersInDataBase() {
-        UserEntity user1 = new UserEntity("Julio", "julio@mail.com", LocalDate.now());
-        UserEntity user2 = new UserEntity("Luisa", "luisa@mail.com", LocalDate.now());
-        UserEntity user3 = new UserEntity("Camila", "camila@mail.com", LocalDate.now());
-        UserEntity user4 = new UserEntity("Valeria", "valeria@mail.com", LocalDate.now());
-        UserEntity user5 = new UserEntity("Andres", "andres@mail.com", LocalDate.now());
-        UserEntity user6 = new UserEntity("Julian", "julian@mail.com", LocalDate.now());
-        UserEntity user7 = new UserEntity("Juan", "juan@mail.com", LocalDate.now());
+        UserEntity user1 = new UserEntity("Julio", "julio@mail.com", LocalDate.of(2022, 9, 26));
+        UserEntity user2 = new UserEntity("Luisa", "luisa@mail.com", LocalDate.of(2022, 9, 26));
+        UserEntity user3 = new UserEntity("Camila", "camila@mail.com", LocalDate.of(2022, 9, 26));
+        UserEntity user4 = new UserEntity("Valeria", "valeria@mail.com", LocalDate.of(2022, 9, 26));
+        UserEntity user5 = new UserEntity("Andres", "andres@mail.com", LocalDate.of(2022, 9, 26));
+        UserEntity user6 = new UserEntity("Julian", "julian@mail.com", LocalDate.of(2022, 9, 26));
+        UserEntity user7 = new UserEntity("Juan", "juan@mail.com", LocalDate.of(2022, 9, 26));
 
         List<UserEntity> listUsers = Arrays.asList(user1, user2, user3, user4, user5, user6, user7);
         userRepository.saveAll(listUsers);
@@ -101,6 +101,9 @@ public class FundamentosApplication implements CommandLineRunner {
         userRepository
                 .findByNameContainsOrderByIdAsc("l")
                 .forEach(user -> LOGGER.info("Usuarios con findByNameContainsOrderByIdAsc y ordenado de forma ascendente " + user));
+
+        LOGGER.info("El usuarios a partir del named parameter es : " + userRepository.encontrarUsuarioConDTO(
+                LocalDate.of(2022, 9, 26), "luisa@mail.com"));
 
     }
 

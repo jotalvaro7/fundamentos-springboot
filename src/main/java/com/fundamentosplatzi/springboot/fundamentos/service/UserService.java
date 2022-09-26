@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -27,5 +28,24 @@ public class UserService {
 
     public List<UserEntity> getAllUsers(){
         return userRepository.findAll();
+    }
+
+    @Transactional
+    public UserEntity save(UserEntity user) {
+        return userRepository.save(user);
+    }
+
+    public void delete(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    public UserEntity update(UserEntity newUser, Long id) {
+         return userRepository.findById(id)
+                .map(user -> {
+                    user.setName(newUser.getName());
+                    user.setEmail(newUser.getEmail());
+                    user.setBirthDate(newUser.getBirthDate());
+                    return userRepository.save(user);
+                }).get();
     }
 }

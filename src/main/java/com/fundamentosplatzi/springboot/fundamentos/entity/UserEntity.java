@@ -1,5 +1,6 @@
 package com.fundamentosplatzi.springboot.fundamentos.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
@@ -29,6 +30,7 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
+    @JsonIgnore
     private List<Post> posts = new ArrayList<>();
 
     public UserEntity() {

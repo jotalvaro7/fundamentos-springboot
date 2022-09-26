@@ -26,6 +26,7 @@ public class UserService {
                 .forEach(userRepository::save);
     }
 
+    @Transactional(readOnly = true)
     public List<UserEntity> getAllUsers(){
         return userRepository.findAll();
     }
@@ -35,10 +36,12 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     public void delete(Long id) {
         userRepository.deleteById(id);
     }
 
+    @Transactional
     public UserEntity update(UserEntity newUser, Long id) {
          return userRepository.findById(id)
                 .map(user -> {
